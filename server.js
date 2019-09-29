@@ -10,8 +10,19 @@ app.post('/signup', upload.none(), (req , res) => {
     console.log("sign up hit", req.body)
     let username = req.body.username
     let password = req.body.password
-    passwordsAssoc[username] = password
-    res.send("<html><h2>User sign up with the valid username and password</h2></html>")
+    if (!passwordsAssoc.hasOwnProperty(username)) 
+    {
+        passwordsAssoc[username] = password
+        res.send("<html><h2>User sign up with the valid username and password</h2></html>")
+    }
+    else 
+    {
+        if (passwordsAssoc[username] === password) 
+            res.send("<html><h2>User existed, please login</h2></html>")
+        else 
+            res.send("<html><h2>User existed already, and password doesn't match</h2></html>")
+
+    }        
 })
 
 app.post('/login', upload.none(), (req, res) => {
@@ -20,7 +31,7 @@ app.post('/login', upload.none(), (req, res) => {
     let passwordGiven = req.body.password
     let expectedPassword = passwordsAssoc[username]
     if (expectedPassword !== passwordGiven) {
-        res.send("<html><h2>Invalid username and password</h2></html>")
+        res.send("<html><h2>Invalid username and password</h2><form action='/login' method='POST' enctype='multipart/form-data'><div>Username</div><input type='text' name='username'><div>Password</div><input type='text' name='password'><input type='submit' value='let me in!'></form><a href='http://localhost:4000/'>Back to login</a></html>")
         return
     }
     else 

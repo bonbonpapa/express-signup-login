@@ -3,6 +3,7 @@ let app = express()
 let multer = require("multer")
 let upload = multer()
 let passwordsAssoc = {}
+let passwordsAttemp = {}
 
 app.use('/', express.static(__dirname + '/public'))
 
@@ -31,6 +32,24 @@ app.post('/login', upload.none(), (req, res) => {
     let passwordGiven = req.body.password
     let expectedPassword = passwordsAssoc[username]
     if (expectedPassword !== passwordGiven) {
+        if (!passwordsAttemp.hasOwnProperty(username))
+        {
+            passwordsAttemp[username] = 1
+            console.log(passwordsAttemp[username])
+
+        }    
+        else if (passwordsAttemp[username] < 2)
+        {
+            passwordsAttemp[username] += 1
+            console.log(passwordsAttemp[username])
+       }
+            
+        else
+        {
+            console.log(passwordsAttemp[username])
+            res.send("<html><h2>Input the password wrongly 3 times, the account is disabled</h2></html>")
+            return
+        }
         res.send("<html><h2>Invalid username and password</h2><form action='/login' method='POST' enctype='multipart/form-data'><div>Username</div><input type='text' name='username'><div>Password</div><input type='text' name='password'><input type='submit' value='let me in!'></form><a href='http://localhost:4000/'>Back to login</a></html>")
         return
     }

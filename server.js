@@ -50,7 +50,17 @@ app.post('/login', upload.none(), (req, res) => {
             res.send("<html><h2>Input the password wrongly 3 times, the account is disabled</h2></html>")
             return
         }
-        res.send("<html><h2>Invalid username and password</h2><form action='/login' method='POST' enctype='multipart/form-data'><div>Username</div><input type='text' name='username'><div>Password</div><input type='text' name='password'><input type='submit' value='let me in!'></form><a href='http://localhost:4000/'>Back to login</a></html>")
+        res.send(`
+            <html>
+                <h2>Invalid username and password</h2>
+                <form action='/login' method='POST' enctype='multipart/form-data'>
+                    <div>Username</div><input type='text' name='username'>
+                    <div>Password</div><input type='text' name='password'>
+                    <input type='submit' value='let me in!'>
+                </form>
+                <a href='http://localhost:4000/login.html'>Back to login</a>
+            </html>        
+        `)
         return
     }
     else 
